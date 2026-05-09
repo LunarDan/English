@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="relative z-8 p-8">
-              
+                <Hologram />
             </div>
         </div>
 
@@ -86,12 +86,18 @@
 
 
 <script setup lang="ts">
-const stats = [
+import Hologram from './components/Hologram.vue'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, reactive } from 'vue'
+gsap.registerPlugin(ScrollTrigger)
+ 
+const stats = reactive([
     { value: 0, suffix: '+', label: '累计学员', target: 1000000 },
     { value: 0, suffix: '+', label: '精品课程', target: 500 },
     { value: 0, suffix: '%', label: '学员满意度', target: 98 },
     { value: 0, suffix: '+', label: '学习时长(小时)', target: 5000000 }
-]
+])
 
 const abouts = [
     {
@@ -110,4 +116,97 @@ const abouts = [
         content: '基于艾宾浩斯遗忘曲线，智能安排复习计划，让单词真正记住。'
     },
 ]
+
+
+const initProject = ()=>{
+
+    //数字过渡
+    stats.forEach((item)=>{
+        gsap.to(item,{
+            value: item.target,
+            duration: 2,
+            ease: 'power1.outOut',
+        })
+    })
+
+     //卡片过度
+    const cards = gsap.utils.toArray('.about-card') as HTMLElement[]
+    console.log(cards)
+    cards.forEach((card, index) => {
+        gsap.fromTo(card,
+            {
+                opacity: 0,
+                y: 40,
+                scale: 0.98,
+            },
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.5,
+                delay: index * 0.08,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.cards-container',
+                    start: 'top 75%',
+                }
+         })
+    })
+    //文字过度
+    gsap.fromTo('.text-why', {
+        opacity: 0,
+        y: 60,
+    }, {
+        opacity: 1,
+        y: 0,
+    })
+    gsap.fromTo('.text-why-content', {
+        opacity: 0,
+        y: 60,
+    }, {
+        opacity: 1,
+        y: 0,
+    })
+    //核心优势文字过度
+    gsap.fromTo('.text-core', {
+        opacity: 0,
+        y: 60,
+    }, {
+        opacity: 1,
+        y: 0,
+        scrollTrigger: {
+            trigger: '.text-core',
+            start: 'top 70%',
+        }
+    })
+    gsap.fromTo('.core-title', {
+        opacity: 0,
+        y: 60,
+    }, {
+        opacity: 1,
+        y: 0,
+        scrollTrigger: {
+            trigger: '.core-title',
+            start: 'top 70%',
+        }
+    })
+    gsap.fromTo('.core-content', {
+        opacity: 0,
+        y: 60,
+    }, {
+        opacity: 1,
+        y: 0,
+        scrollTrigger: {
+            trigger: '.core-content',
+            start: 'top 70%',
+        }
+    })
+}
+
+onMounted(()=>{
+    initProject()
+})
+
+
+
 </script>
