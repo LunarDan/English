@@ -46,29 +46,3 @@ pnpm run server
 ```bash
 pnpm run all
 ```
-
-## 环境变量
-
-后端环境变量放在：
-
-```text
-server/.env
-```
-
-`.env` 文件不要提交到 GitHub。可以根据实际需要新增 `server/.env.example`，只保留变量名和示例值。
-
-## Git 提交
-
-提交前先查看改动：
-
-```bash
-git status
-```
-
-提交当前 Home 页面完善内容：
-
-```bash
-git add .
-git commit -m "feat: improve home page"
-git push
-```
