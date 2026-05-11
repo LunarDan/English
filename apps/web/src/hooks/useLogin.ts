@@ -6,7 +6,14 @@ export const useLogin = () => {
   const userStore = useUserStore()
 
   const login = () => {
-    isShowLogin.value = true
+    return new Promise((resolve, reject) => {
+      if (userStore.user) {
+        resolve(true)
+      } else {
+        isShowLogin.value = true
+        reject(false)
+      }
+    })
   }
   const hide = () => {
     isShowLogin.value = false

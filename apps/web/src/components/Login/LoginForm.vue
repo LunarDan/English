@@ -26,13 +26,22 @@
 
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref,useTemplateRef,toRaw } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
-const form = ref({
+import { login } from '@/apis/user' //登录的接口
+import type { UserLogin } from '@en/common/user' //登录类型
+import md5 from 'md5' //md5加密
+import type { FormInstance } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/stores/user'
+import { useLogin } from '@/hooks/useLogin'
+const { hide } = useLogin()
+const formRef = useTemplateRef<FormInstance>('formRef')
+const userStore = useUserStore()
+const form = ref<UserLogin>({
     phone: '',
     password: '',
 })
-
 const rules = {
     phone: [
         { required: true, message: '请输入手机号', trigger: 'blur' },
@@ -46,7 +55,18 @@ const rules = {
 
 
 
-const handleLogin = () => {
-    console.log(form.value)
+const handleLogin = async () => {
+     await formRef.value?.validate() //触发校验的
+    const res = await login({
+        ...toRaw(form.value),
+        password: toRaw(md5(form.value.password))
+    })
+    if(res.code === 200){
+        userStore.setUser(res.data)
+        ElMessage.success('登录成功')
+        hide()
+    }else{
+        ElMessage.error(res.message)
+    }
 }
 </script>

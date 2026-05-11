@@ -209,7 +209,10 @@ const initProject = ()=>{
 
 const ShowLogin = () =>{
     // isShowLogin.value = true
-    login()
+    login().then(()=>{
+        console.log('登录成功跳转页面');
+        
+    })
 }
 
 
